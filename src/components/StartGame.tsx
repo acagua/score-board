@@ -19,11 +19,18 @@ export const StartGame: FC<Props> = ({ startGame }) => {
     });
   };
 
+  const handleOnBlur = ({ target }: React.FocusEvent<HTMLInputElement>) => {
+    setTeams({
+      ...teams,
+      [target.name]: target.value.trim(),
+    });
+  };
+
   const handleClick = () => {
     const newGame = {
-      homeTeam: teams.home,
+      homeTeam: teams.home.trim(),
       homeScore: 0,
-      awayTeam: teams.away,
+      awayTeam: teams.away.trim(),
       awayScore: 0,
       timestamp: new Date().getTime(),
     };
@@ -40,6 +47,7 @@ export const StartGame: FC<Props> = ({ startGame }) => {
         type="text"
         value={teams.home}
         onChange={handleOnChange}
+        onBlur={handleOnBlur}
       />
       <label htmlFor="awayTeam">Away Team</label>
       <input
@@ -48,8 +56,14 @@ export const StartGame: FC<Props> = ({ startGame }) => {
         type="text"
         value={teams.away}
         onChange={handleOnChange}
+        onBlur={handleOnBlur}
       />
-      <button onClick={handleClick}> Start </button>
+      <button
+        onClick={handleClick}
+        disabled={!Boolean(teams.away) || !Boolean(teams.home)}
+      >
+        Start
+      </button>
     </section>
   );
 };

@@ -13,9 +13,14 @@ export const Playing: FC<Props> = ({ games }) => {
     <section className="container" role="presentation">
       <h2>Playing</h2>
       {games.map((game) => (
-        <p>
-          {game.homeTeam} - {game.awayTeam}
-        </p>
+        <>
+          <p>
+            {game.homeTeam} - {game.awayTeam}
+          </p>
+          <button> Score </button>
+          <button> Score </button>
+          <button>Finish</button>
+        </>
       ))}
     </section>
   );
