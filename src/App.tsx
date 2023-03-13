@@ -9,15 +9,9 @@ function App() {
   return (
     <div className="App">
       <h1>World Cup score board</h1>
-      <section className="container" role="presentation">
-        <StartGame />
-      </section>
-      <section className="container" role="presentation">
-        <Playing />
-      </section>
-      <section className="container" role="presentation">
-        <Results />
-      </section>
+      <StartGame />
+      <Playing />
+      <Results />
     </div>
   );
 }

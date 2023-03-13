@@ -1,5 +1,5 @@
 import { FC } from "react";
 
 export const Results: FC = () => {
-  return <></>;
+  return <section className="container" role="presentation"></section>;
 };

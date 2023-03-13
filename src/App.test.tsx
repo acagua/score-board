@@ -19,10 +19,9 @@ describe("Score Board", () => {
 
     screen.getByRole("button", { name: /start/i });
 
-    const [, playing, results] = screen.getAllByRole("presentation");
+    const sections = screen.getAllByRole("presentation");
 
-    expect(playing).toBeEmptyDOMElement();
-    expect(results).toBeEmptyDOMElement();
+    expect(sections).toHaveLength(1);
 
     expect(homeTeamInput).not.toHaveValue();
     expect(awayTeamInput).not.toHaveValue();
