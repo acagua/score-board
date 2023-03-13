@@ -6,12 +6,14 @@ import { Results } from "./components/Results";
 import "./App.css";
 
 function App() {
+  const [showPlaying, setShowPlaying] = useState(false);
+  const [showResults, setShowResults] = useState(false);
   return (
     <div className="App">
       <h1>World Cup score board</h1>
       <StartGame />
-      <Playing />
-      <Results />
+      {showPlaying && <Playing />}
+      {showResults && <Results />}
     </div>
   );
 }

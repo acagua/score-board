@@ -26,4 +26,39 @@ describe("Score Board", () => {
     expect(homeTeamInput).not.toHaveValue();
     expect(awayTeamInput).not.toHaveValue();
   });
+
+  it("Should render Playing the first game starts", () => {
+    render(<App />);
+
+    const homeTeamInput = screen.getByRole("textbox", { name: /home team/i });
+    const awayTeamInput = screen.getByRole("textbox", { name: /away team/i });
+
+    const startButton = screen.getByRole("button", { name: /start/i });
+
+    const scoreButton = screen.queryByRole("button", { name: /score/i });
+    const finishButton = screen.queryByRole("button", { name: /finish/i });
+
+    expect(scoreButton).not.toBeInTheDocument();
+    expect(finishButton).not.toBeInTheDocument();
+
+    userEvent.clear(homeTeamInput);
+    userEvent.type(homeTeamInput, "Colombia");
+
+    userEvent.clear(awayTeamInput);
+    userEvent.type(awayTeamInput, "Brasil");
+
+    expect(homeTeamInput).toHaveValue("Colombia");
+    expect(awayTeamInput).toHaveValue("Brasil");
+
+    userEvent.click(startButton);
+
+    expect(homeTeamInput).not.toHaveValue("");
+    expect(awayTeamInput).not.toHaveValue("");
+
+    const [, playing] = screen.getAllByRole("presentation");
+
+    expect(playing).not.toBeEmptyDOMElement();
+
+    screen.getByRole("heading", { name: /playing/i, level: 2 });
+  });
 });
