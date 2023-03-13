@@ -33,3 +33,4 @@ After running `yarn build` the `vite preview` command will boot up a local stati
 - Summary only shows finished games.
 - _Start Game_ timestamp will be used for sorting games in the games summary section (not the _finish game_ timestamp).
 - `UIGuide` in assets is a reference of inputs and fields, will not be used for styling
+- _Playing_ and _Results_ from the `UIGuide` will only be shown if there is data related to the specific section
