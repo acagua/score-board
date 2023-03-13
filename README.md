@@ -32,3 +32,4 @@ After running `yarn build` the `vite preview` command will boot up a local stati
 - There can be multiple games being played at the same time.
 - Summary only shows finished games.
 - _Start Game_ timestamp will be used for sorting games in the games summary section (not the _finish game_ timestamp).
+- `UIGuide` in assets is a reference of inputs and fields, will not be used for styling
