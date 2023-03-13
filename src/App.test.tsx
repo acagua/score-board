@@ -28,6 +28,52 @@ describe("Score Board", () => {
     expect(startButton).toBeDisabled();
   });
 
+  it("Should not render the started game if home team is not defined", async () => {
+    render(<App />);
+
+    const homeTeamInput = screen.getByRole("textbox", { name: /home team/i });
+
+    const startButton = screen.getByRole("button", { name: /start/i });
+
+    await userEvent.type(homeTeamInput, "Colombia");
+
+    await userEvent.click(startButton);
+
+    const sections = screen.getAllByRole("presentation");
+
+    expect(sections).toHaveLength(1);
+
+    const playingSectionHeading = screen.queryByRole("heading", {
+      name: /playing/i,
+      level: 2,
+    });
+
+    expect(playingSectionHeading).not.toBeInTheDocument();
+  });
+
+  it("Should not render the started game if away team is not defined", async () => {
+    render(<App />);
+
+    const awayTeamInput = screen.getByRole("textbox", { name: /away team/i });
+
+    const startButton = screen.getByRole("button", { name: /start/i });
+
+    await userEvent.type(awayTeamInput, "Brasil");
+
+    await userEvent.click(startButton);
+
+    const sections = screen.getAllByRole("presentation");
+
+    expect(sections).toHaveLength(1);
+
+    const playingSectionHeading = screen.queryByRole("heading", {
+      name: /playing/i,
+      level: 2,
+    });
+
+    expect(playingSectionHeading).not.toBeInTheDocument();
+  });
+
   it("Should render Playing when the first game starts", async () => {
     render(<App />);
 
@@ -42,10 +88,8 @@ describe("Score Board", () => {
     expect(scoreButton).not.toBeInTheDocument();
     expect(finishButton).not.toBeInTheDocument();
 
-    await userEvent.clear(homeTeamInput);
     await userEvent.type(homeTeamInput, "Colombia");
 
-    await userEvent.clear(awayTeamInput);
     await userEvent.type(awayTeamInput, "Brasil");
 
     expect(homeTeamInput).toHaveValue("Colombia");
@@ -71,54 +115,109 @@ describe("Score Board", () => {
     });
 
     expect(scoreButtons).toHaveLength(2);
-    expect(finishButtonAfterRender).toBeInTheDocument();
+    expect(finishButtonAfterRender).toBeVisible();
   });
 
-  it("Should not render the started game if home team is not defined", async () => {
+  it("Should show score, add to home score and away score when correponding button is presssed, and should remove the game when finished ", async () => {
     render(<App />);
 
     const homeTeamInput = screen.getByRole("textbox", { name: /home team/i });
-
+    const awayTeamInput = screen.getByRole("textbox", { name: /away team/i });
     const startButton = screen.getByRole("button", { name: /start/i });
 
-    await userEvent.clear(homeTeamInput);
     await userEvent.type(homeTeamInput, "Colombia");
-
+    await userEvent.type(awayTeamInput, "Brasil");
     await userEvent.click(startButton);
 
-    const sections = screen.getAllByRole("presentation");
+    const [scoreHome, scoreAway] = screen.getAllByRole("button", {
+      name: /score/i,
+    });
 
-    expect(sections).toHaveLength(1);
+    screen.getByRole("heading", { name: /playing/i, level: 2 });
 
-    const playingSectionHeading = screen.queryByRole("heading", {
+    screen.getByText(/Colombia 0 - 0 Brasil/);
+    await userEvent.click(scoreHome);
+    screen.getByText(/Colombia 1 - 0 Brasil/);
+    await userEvent.click(scoreHome);
+    screen.getByText(/Colombia 2 - 0 Brasil/);
+    await userEvent.click(scoreAway);
+    screen.getByText(/Colombia 2 - 1 Brasil/);
+
+    const finishGame = screen.getByRole("button", {
+      name: /score/i,
+    });
+
+    await userEvent.click(finishGame);
+
+    const playingHeading = screen.queryByRole("heading", {
       name: /playing/i,
       level: 2,
     });
-
-    expect(playingSectionHeading).not.toBeInTheDocument();
+    expect(playingHeading).not.toBeInTheDocument();
   });
 
-  it("Should not render the started game if home team is not defined", async () => {
+  it("Should render Results when the first game finishes and hide Playing when no playing matches are left", async () => {
     render(<App />);
 
+    const homeTeamInput = screen.getByRole("textbox", { name: /home team/i });
     const awayTeamInput = screen.getByRole("textbox", { name: /away team/i });
-
     const startButton = screen.getByRole("button", { name: /start/i });
 
-    await userEvent.clear(awayTeamInput);
+    await userEvent.type(homeTeamInput, "Colombia");
     await userEvent.type(awayTeamInput, "Brasil");
-
     await userEvent.click(startButton);
 
-    const sections = screen.getAllByRole("presentation");
+    const finishGame = screen.getByRole("button", {
+      name: /score/i,
+    });
 
-    expect(sections).toHaveLength(1);
+    await userEvent.click(finishGame);
 
-    const playingSectionHeading = screen.queryByRole("heading", {
+    const resultsHeading = screen.getByRole("heading", {
+      name: /results/i,
+      level: 2,
+    });
+    expect(resultsHeading).toBeVisible();
+    const [, result] = screen.getAllByRole("presentation");
+    expect(result).not.toBeEmptyDOMElement();
+  });
+
+  it("Should render all sections when having a playing game and  finished one", async () => {
+    render(<App />);
+
+    const homeTeamInput = screen.getByRole("textbox", { name: /home team/i });
+    const awayTeamInput = screen.getByRole("textbox", { name: /away team/i });
+    const startButton = screen.getByRole("button", { name: /start/i });
+
+    await userEvent.type(homeTeamInput, "Colombia");
+    await userEvent.type(awayTeamInput, "Brasil");
+    await userEvent.click(startButton);
+
+    await userEvent.type(homeTeamInput, "Argentina");
+    await userEvent.type(awayTeamInput, "Bolivia");
+    await userEvent.click(startButton);
+
+    const finishGames = screen.getAllByRole("button", {
+      name: /score/i,
+    });
+
+    await userEvent.click(finishGames[0]);
+
+    const playingHeading = screen.getByRole("heading", {
       name: /playing/i,
       level: 2,
     });
 
-    expect(playingSectionHeading).not.toBeInTheDocument();
+    const resultsHeading = screen.getByRole("heading", {
+      name: /results/i,
+      level: 2,
+    });
+
+    const [, playing, result] = screen.getAllByRole("presentation");
+
+    expect(playingHeading).toBeVisible();
+    expect(resultsHeading).toBeVisible();
+    expect(playing).not.toBeEmptyDOMElement();
+    expect(result).not.toBeEmptyDOMElement();
   });
 });
