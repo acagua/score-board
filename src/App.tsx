@@ -5,15 +5,22 @@ import { Results } from "./components/Results";
 
 import "./App.css";
 
+export interface Game {
+  homeTeam: string;
+  awayTeam: string;
+  homeScore: number;
+  awayScore: number;
+  timestamp: number;
+}
+
 function App() {
-  const [showPlaying, setShowPlaying] = useState(false);
-  const [showResults, setShowResults] = useState(false);
+  const [playingGames, setPlayingGames] = useState<Game[]>([]);
   return (
     <div className="App">
       <h1>World Cup score board</h1>
-      <StartGame />
-      {showPlaying && <Playing />}
-      {showResults && <Results />}
+      <StartGame startGame={setPlayingGames} />
+      <Playing games={playingGames} />
+      <Results games={[]} />
     </div>
   );
 }

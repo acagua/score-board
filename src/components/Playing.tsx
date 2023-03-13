@@ -1,5 +1,22 @@
 import { FC } from "react";
+import { Game } from "../App";
 
-export const Playing: FC = () => {
-  return <section className="container" role="presentation"></section>;
+interface Props {
+  games: Game[];
+}
+
+export const Playing: FC<Props> = ({ games }) => {
+  if (games.length === 0) {
+    return null;
+  }
+  return (
+    <section className="container" role="presentation">
+      <h2>Playing</h2>
+      {games.map((game) => (
+        <p>
+          {game.homeTeam} - {game.awayTeam}
+        </p>
+      ))}
+    </section>
+  );
 };

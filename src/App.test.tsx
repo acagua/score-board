@@ -27,7 +27,7 @@ describe("Score Board", () => {
     expect(awayTeamInput).not.toHaveValue();
   });
 
-  it("Should render Playing the first game starts", () => {
+  it("Should render Playing the first game starts", async () => {
     render(<App />);
 
     const homeTeamInput = screen.getByRole("textbox", { name: /home team/i });
@@ -41,19 +41,19 @@ describe("Score Board", () => {
     expect(scoreButton).not.toBeInTheDocument();
     expect(finishButton).not.toBeInTheDocument();
 
-    userEvent.clear(homeTeamInput);
-    userEvent.type(homeTeamInput, "Colombia");
+    await userEvent.clear(homeTeamInput);
+    await userEvent.type(homeTeamInput, "Colombia");
 
-    userEvent.clear(awayTeamInput);
-    userEvent.type(awayTeamInput, "Brasil");
+    await userEvent.clear(awayTeamInput);
+    await userEvent.type(awayTeamInput, "Brasil");
 
     expect(homeTeamInput).toHaveValue("Colombia");
     expect(awayTeamInput).toHaveValue("Brasil");
 
-    userEvent.click(startButton);
+    await userEvent.click(startButton);
 
-    expect(homeTeamInput).not.toHaveValue("");
-    expect(awayTeamInput).not.toHaveValue("");
+    expect(homeTeamInput).toHaveValue("");
+    expect(awayTeamInput).toHaveValue("");
 
     const [, playing] = screen.getAllByRole("presentation");
 
