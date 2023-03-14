@@ -1,14 +1,14 @@
 import { FC } from "react";
-import { Game } from "../App";
+import { Game, Status } from "../App";
 
 interface Props {
   games: Game[];
   updateGames: React.Dispatch<React.SetStateAction<Game[]>>;
-  finishGame: React.Dispatch<React.SetStateAction<Game[]>>;
 }
 
-export const Playing: FC<Props> = ({ games, updateGames, finishGame }) => {
-  if (games.length === 0) {
+export const Playing: FC<Props> = ({ games, updateGames }) => {
+  const playingGames = games.filter((game) => game.status === Status.PLAYING);
+  if (playingGames.length === 0) {
     return null;
   }
 
@@ -39,16 +39,24 @@ export const Playing: FC<Props> = ({ games, updateGames, finishGame }) => {
 
   const handleOnFinishGame = (index: number) => {
     const finishedGame = games[index];
+
     updateGames((prevGames) =>
-      prevGames.filter((game) => game.timestamp !== finishedGame.timestamp)
+      prevGames.map((game) => {
+        if (game.timestamp === finishedGame.timestamp) {
+          return {
+            ...game,
+            status: Status.FINISHED,
+          };
+        }
+        return game;
+      })
     );
-    finishGame((prevFinishedGames) => [...prevFinishedGames, finishedGame]);
   };
 
   return (
     <section className="container" role="presentation">
       <h2>Playing</h2>
-      {games.map((game, index) => (
+      {playingGames.map((game, index) => (
         <div key={game.timestamp}>
           <p>
             {game.homeTeam} {game.homeScore} - {game.awayScore} {game.awayTeam}

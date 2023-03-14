@@ -5,27 +5,27 @@ import { Results } from "./components/Results";
 
 import "./App.css";
 
+export enum Status {
+  PLAYING = "playing",
+  FINISHED = "finished",
+}
 export interface Game {
   homeTeam: string;
   awayTeam: string;
   homeScore: number;
   awayScore: number;
+  status: Status;
   timestamp: number;
 }
 
 function App() {
-  const [playingGames, setPlayingGames] = useState<Game[]>([]);
-  const [finishedGames, setFinishedGames] = useState<Game[]>([]);
+  const [games, setGames] = useState<Game[]>([]);
   return (
     <div className="App">
       <h1>World Cup score board</h1>
-      <StartGame startGame={setPlayingGames} />
-      <Playing
-        games={playingGames}
-        updateGames={setPlayingGames}
-        finishGame={setFinishedGames}
-      />
-      <Results games={finishedGames} />
+      <StartGame startGame={setGames} />
+      <Playing games={games} updateGames={setGames} />
+      <Results games={games} />
     </div>
   );
 }

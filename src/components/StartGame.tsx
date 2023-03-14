@@ -1,5 +1,5 @@
 import { FC, SetStateAction, useState } from "react";
-import { Game } from "../App";
+import { Game, Status } from "../App";
 
 interface Props {
   startGame: React.Dispatch<SetStateAction<Game[]>>;
@@ -33,6 +33,7 @@ export const StartGame: FC<Props> = ({ startGame }) => {
       awayTeam: teams.away.trim(),
       awayScore: 0,
       timestamp: new Date().getTime(),
+      status: Status.PLAYING,
     };
     startGame((games) => [...games, newGame]);
     setTeams(initialState);
