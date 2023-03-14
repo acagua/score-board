@@ -220,5 +220,38 @@ describe("Score Board", () => {
     expect(playing).not.toBeEmptyDOMElement();
     expect(result).not.toBeEmptyDOMElement();
   });
+
+  it("Should be able to finish multiple games", async () => {
+    render(<App />);
+
+    const homeTeamInput = screen.getByRole("textbox", { name: /home team/i });
+    const awayTeamInput = screen.getByRole("textbox", { name: /away team/i });
+    const startButton = screen.getByRole("button", { name: /start/i });
+
+    await userEvent.type(homeTeamInput, "Colombia");
+    await userEvent.type(awayTeamInput, "Brasil");
+    await userEvent.click(startButton);
+
+    await userEvent.type(homeTeamInput, "Argentina");
+    await userEvent.type(awayTeamInput, "Bolivia");
+    await userEvent.click(startButton);
+
+    await userEvent.type(homeTeamInput, "España");
+    await userEvent.type(awayTeamInput, "Holanda");
+    await userEvent.click(startButton);
+
+    const finishGames = screen.getAllByRole("button", {
+      name: /finish/i,
+    });
+
+    await userEvent.click(finishGames[1]);
+    await userEvent.click(finishGames[0]);
+    await userEvent.click(finishGames[2]);
+
+    const finishGamesAfterClean = screen.queryAllByRole("button", {
+      name: /finish/i,
+    });
+
+    expect(finishGamesAfterClean).toHaveLength(0);
+  });
 });
-//TODO PREVENT DUPLICATE GAMES
