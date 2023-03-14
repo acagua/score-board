@@ -6,43 +6,35 @@ interface Props {
   updateGames: React.Dispatch<React.SetStateAction<Game[]>>;
 }
 
+enum TeamScore {
+  HOME = "homeScore",
+  AWAY = "awayScore",
+}
+
 export const Playing: FC<Props> = ({ games, updateGames }) => {
   const playingGames = games.filter((game) => game.status === Status.PLAYING);
   if (playingGames.length === 0) {
     return null;
   }
 
-  const handleOnScoreHome = (index: number) => {
+  const handleOnScore = (timestamp: number, key: TeamScore) => {
     updateGames((prevGames) => {
-      const updatedGames = [...prevGames];
-      const selectedGame = { ...updatedGames[index] };
-      updatedGames[index] = {
-        ...selectedGame,
-        homeScore: selectedGame.homeScore + 1,
-      };
-
-      return updatedGames;
-    });
-  };
-  const handleOnScoreAway = (index: number) => {
-    updateGames((prevGames) => {
-      const updatedGames = [...prevGames];
-      const selectedGame = { ...updatedGames[index] };
-      updatedGames[index] = {
-        ...selectedGame,
-        awayScore: selectedGame.awayScore + 1,
-      };
-
-      return updatedGames;
+      return prevGames.map((game) => {
+        if (game.timestamp === timestamp) {
+          return {
+            ...game,
+            [key]: game[key] + 1,
+          };
+        }
+        return game;
+      });
     });
   };
 
-  const handleOnFinishGame = (index: number) => {
-    const finishedGame = games[index];
-
+  const handleOnFinishGame = (timestamp: number) => {
     updateGames((prevGames) =>
       prevGames.map((game) => {
-        if (game.timestamp === finishedGame.timestamp) {
+        if (game.timestamp === timestamp) {
           return {
             ...game,
             status: Status.FINISHED,
@@ -56,26 +48,28 @@ export const Playing: FC<Props> = ({ games, updateGames }) => {
   return (
     <section className="container" role="presentation">
       <h2>Playing</h2>
-      {playingGames.map((game, index) => (
+      {playingGames.map((game) => (
         <div key={game.timestamp}>
           <p>
             {game.homeTeam} {game.homeScore} - {game.awayScore} {game.awayTeam}
           </p>
           <button
             onClick={() => {
-              handleOnScoreHome(index);
+              handleOnScore(game.timestamp, TeamScore.HOME);
             }}
           >
             Score
           </button>
           <button
             onClick={() => {
-              handleOnScoreAway(index);
+              handleOnScore(game.timestamp, TeamScore.AWAY);
             }}
           >
             Score
           </button>
-          <button onClick={() => handleOnFinishGame(index)}>Finish</button>
+          <button onClick={() => handleOnFinishGame(game.timestamp)}>
+            Finish
+          </button>
         </div>
       ))}
     </section>
