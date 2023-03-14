@@ -144,7 +144,7 @@ describe("Score Board", () => {
     screen.getByText(/Colombia 2 - 1 Brasil/);
 
     const finishGame = screen.getByRole("button", {
-      name: /score/i,
+      name: /finish/i,
     });
 
     await userEvent.click(finishGame);
@@ -168,7 +168,7 @@ describe("Score Board", () => {
     await userEvent.click(startButton);
 
     const finishGame = screen.getByRole("button", {
-      name: /score/i,
+      name: /finish/i,
     });
 
     await userEvent.click(finishGame);
@@ -182,7 +182,7 @@ describe("Score Board", () => {
     expect(result).not.toBeEmptyDOMElement();
   });
 
-  it("Should render all sections when having a playing game and  finished one", async () => {
+  it("Should render all sections when having a playing game and finished one", async () => {
     render(<App />);
 
     const homeTeamInput = screen.getByRole("textbox", { name: /home team/i });
@@ -198,7 +198,7 @@ describe("Score Board", () => {
     await userEvent.click(startButton);
 
     const finishGames = screen.getAllByRole("button", {
-      name: /score/i,
+      name: /finish/i,
     });
 
     await userEvent.click(finishGames[0]);
@@ -221,3 +221,4 @@ describe("Score Board", () => {
     expect(result).not.toBeEmptyDOMElement();
   });
 });
+//TODO PREVENT DUPLICATE GAMES

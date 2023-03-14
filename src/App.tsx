@@ -15,12 +15,17 @@ export interface Game {
 
 function App() {
   const [playingGames, setPlayingGames] = useState<Game[]>([]);
+  const [finishedGames, setFinishedGames] = useState<Game[]>([]);
   return (
     <div className="App">
       <h1>World Cup score board</h1>
       <StartGame startGame={setPlayingGames} />
-      <Playing games={playingGames} />
-      <Results games={[]} />
+      <Playing
+        games={playingGames}
+        updateGames={setPlayingGames}
+        finishGame={setFinishedGames}
+      />
+      <Results games={finishedGames} />
     </div>
   );
 }
