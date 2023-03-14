@@ -10,11 +10,12 @@ interface Props {
 
 export const PlayingGame: FC<Props> = ({ game, updateScore, finishGame }) => {
   return (
-    <>
-      <p>
+    <div className="playing">
+      <p className="teams">
         {game.homeTeam} {game.homeScore} - {game.awayScore} {game.awayTeam}
       </p>
       <button
+        className="homeBtn"
         onClick={() => {
           updateScore(game.timestamp, TeamScore.HOME);
         }}
@@ -22,13 +23,16 @@ export const PlayingGame: FC<Props> = ({ game, updateScore, finishGame }) => {
         Score
       </button>
       <button
+        className="awayBtn"
         onClick={() => {
           updateScore(game.timestamp, TeamScore.AWAY);
         }}
       >
         Score
       </button>
-      <button onClick={() => finishGame(game.timestamp)}>Finish</button>
-    </>
+      <button className="finishBtn" onClick={() => finishGame(game.timestamp)}>
+        Finish
+      </button>
+    </div>
   );
 };
