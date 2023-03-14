@@ -12,11 +12,22 @@ export const Results: FC<Props> = ({ games }) => {
   return (
     <section className="container" role="presentation">
       <h2>Results</h2>
-      {finishedGames.map((game) => (
-        <p key={game.timestamp}>
-          {game.homeTeam} {game.homeScore} - {game.awayScore} {game.awayTeam}
-        </p>
-      ))}
+      <ul>
+        {finishedGames
+          .sort(
+            (firstGame, secondGame) =>
+              secondGame.homeScore +
+                secondGame.awayScore -
+                (firstGame.homeScore + firstGame.awayScore) ||
+              secondGame.timestamp - firstGame.timestamp
+          )
+          .map((game) => (
+            <li key={game.timestamp}>
+              {game.homeTeam} {game.homeScore} - {game.awayScore}{" "}
+              {game.awayTeam}
+            </li>
+          ))}
+      </ul>
     </section>
   );
 };
