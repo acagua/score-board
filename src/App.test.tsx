@@ -236,8 +236,8 @@ describe("Score Board", () => {
     await userEvent.type(awayTeamInput, "Bolivia");
     await userEvent.click(startButton);
 
-    await userEvent.type(homeTeamInput, "España");
-    await userEvent.type(awayTeamInput, "Holanda");
+    await userEvent.type(homeTeamInput, "Spain");
+    await userEvent.type(awayTeamInput, "Netherlands");
     await userEvent.click(startButton);
 
     const finishGames = screen.getAllByRole("button", {
