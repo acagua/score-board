@@ -23,6 +23,7 @@ input {
 
 .playing .teams {
   grid-area: teams;
+  text-align: center;
 }
 
 .playing .homeBtn {
